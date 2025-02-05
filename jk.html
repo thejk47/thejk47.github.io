@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JK 47's Basement</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        body { background: black; color: #00ff00; font-family: 'Share Tech Mono', monospace; text-align: center; overflow: hidden; }
+        
+        canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        
+        .container { position: relative; top: 30vh; }
+        h1 { font-size: 3rem; text-transform: uppercase; }
+
+        .btn {
+            display: inline-block; margin-top: 20px; padding: 10px 20px;
+            background: transparent; color: #00ff00; border: 2px solid #00ff00;
+            text-decoration: none; font-size: 1.2rem; transition: 0.3s;
+        }
+        .btn:hover { background: #00ff00; color: black; }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #00ff00;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: transform 0.05s ease-out;
+        }
+
+        /* Blinking Footer Link */
+        .byline {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1rem;
+            text-decoration: none;
+            color: #00ff00;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+
+    <div class="container">
+        <h1>JK 47's Basement</h1>
+        <p class="terminal-text">Welcome to JK 47's Basement.</p>
+        <a href="https://discord.gg/uHqJE7sUAP" class="btn">Join the Discord</a>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Blinking GitHub Link -->
+    <a href="https://github.com/vilmeroll3" class="byline" target="_blank">by vilmerolle</a>
+
+    <script>
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const letters = "01JK47HACKERBASEMENT";
+        const matrix = letters.split("");
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#0F0";
+            ctx.font = fontSize + "px monospace";
+
+            drops.forEach((y, i) => {
+                const text = matrix[Math.floor(Math.random() * matrix.length)];
+                const x = i * fontSize;
+                ctx.fillText(text, x, y * fontSize);
+
+                if (y * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            });
+        }
+
+        setInterval(drawMatrix, 50);
+
+        // Custom Cursor Script
+        const cursor = document.getElementById("custom-cursor");
+
+        document.addEventListener("mousemove", (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        document.addEventListener("mousedown", () => {
+            cursor.style.transform = "scale(0.8)";
+        });
+
+        document.addEventListener("mouseup", () => {
+            cursor.style.transform = "scale(1)";
+        });
+
+        // Right Click to Open Discord
+        document.addEventListener("contextmenu", (e) => {
+            e.preventDefault(); // Disable default right-click menu
+            window.open("https://discord.gg/uHqJE7sUAP", "_blank");
+        });
+    </script>
+</body>
+</html>
